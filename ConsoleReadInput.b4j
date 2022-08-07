@@ -1,0 +1,56 @@
+﻿AppType=StandardJava
+Build1=Default,b4j.example
+Group=Default Group
+Library1=jcore
+Library2=javaobject
+NumberOfFiles=0
+NumberOfLibraries=2
+NumberOfModules=0
+Version=9.8
+@EndOfDesignText@
+'Non-UI application (console / server application)
+#Region Project Attributes 
+	#CommandLineArgs:
+	#MergeLibraries: True 
+#End Region
+
+Sub Process_Globals
+	Private sys As JavaObject
+End Sub
+
+Sub AppStart (Args() As String)
+	sys.InitializeStatic("java.lang.System")
+	Dim user_input As String
+	Log("Press <q> to exit..")
+	Do Until user_input.ToLowerCase = "q"
+		user_input = Input("> ")
+		Log($"You entered '${user_input}'"$)
+	Loop
+	Log("Goodbye")
+	Delay(2000)
+	StartMessageLoop
+End Sub
+
+Sub Delay (Milliseconds As Int)
+	Sleep(Milliseconds)
+	StopMessageLoop
+End Sub
+
+Sub Input (Prompt As String) As String
+	'Log("log") 		' <-- OK
+	Print(Prompt)
+	'Log("log") 		' <--	use Log after System.out.print prints ~l02524291:log during Debug
+	
+	'Private reader As TextReader
+	'reader.Initialize(sys.GetField("in"))
+	'Return reader.ReadLine
+	
+	Private scanner As JavaObject
+	scanner.InitializeNewInstance("java.util.Scanner", Array As Object(sys.GetField("in")))
+	Return scanner.RunMethod("nextLine", Null)
+End Sub
+
+Sub Print (Message As String)
+	Private out As JavaObject = sys.GetField("out")
+	out.RunMethod("print", Array As String(Message))
+End Sub
