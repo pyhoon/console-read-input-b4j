@@ -24,10 +24,30 @@ Sub AppStart (Args() As String)
 	Log("Press <q> to exit..")
 	Do Until user_input.ToLowerCase = "q"
 		user_input = Input("> ")
-		Log($"You entered '${user_input}'"$)
+		
+		If user_input.EqualsIgnoreCase("hack") Then
+			Log("root@kali$ Hacking your B4X forum password. Please wait...")
+			Pause(2000)
+
+			Log("root@kali$ Processing... (10%)")
+			Pause(1000)
+			Log("root@kali$ Processing... (20%)")
+			Pause(2000)
+			Log("root@kali$ Processing... (50%)")
+			Pause(500)
+			Log("root@kali$ Processing... (80%)")
+			Pause(500)
+			Log("root@kali$ Processing... (90%)")
+			Pause(500)
+			
+			Log("root@kali$ Completed. Your password is (just kidding)")
+			Pause(1000)
+		Else
+			Log($"You entered '${user_input}'"$)
+		End If
 	Loop
 	Log("Goodbye")
-	Delay(2000)
+	Delay(500)
 	StartMessageLoop
 End Sub
 
@@ -40,7 +60,6 @@ Sub Input (Prompt As String) As String
 	'Log("log") 		' <-- OK
 	Print(Prompt)
 	'Log("log") 		' <--	use Log after System.out.print prints ~l02524291:log during Debug
-	
 	'Private reader As TextReader
 	'reader.Initialize(sys.GetField("in"))
 	'Return reader.ReadLine
@@ -53,4 +72,10 @@ End Sub
 Sub Print (Message As String)
 	Private out As JavaObject = sys.GetField("out")
 	out.RunMethod("print", Array As String(Message))
+End Sub
+
+Sub Pause (Milliseconds As Long)
+	Private jo As JavaObject
+	jo.InitializeStatic("java.lang.Thread")
+	jo.RunMethod("sleep", Array As Object(Milliseconds))
 End Sub
